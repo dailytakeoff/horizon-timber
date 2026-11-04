@@ -1,0 +1,34 @@
+[mod]
+id = "timber"
+version = "0.2.0"
+priority = 100
+
+# The commit it was tested on. It hooks only Horizon's stable `destroy_block`
+# hook point (API 14), so the launcher can build it on your installed Nightly.
+[compatibility]
+horizon_revision = "757ce1bd14f28647e503030d28744a8034b1f3b0"
+
+# The tree-finding logic (also a standalone, unit-tested library).
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "timber"
+source = "runtime.rs"
+
+# The part that reads the world and breaks logs through the game.
+[[module]]
+id = "glue"
+file = "crates/horizon-client/src/game.rs"
+name = "timber_glue"
+source = "glue.rs"
+
+[[injection]]
+id = "destroy_block"
+kind = "HEAD"
+target = "horizon_client::game::native_hooks::Game<'_>::native_destroy_block"
+helper = "destroy_block.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "pos", ty = "[i32; 3]", value = "pos" },
+  { name = "canceled", ty = "&mut bool", value = "&mut *canceled" },
+]

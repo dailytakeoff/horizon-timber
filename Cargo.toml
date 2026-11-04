@@ -1,0 +1,11 @@
+[package]
+name = "horizon-timber"
+version = "0.2.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "Timber for Horizon: break one log or ore and the whole tree or vein comes down."
+
+# The same file the bundle adds to the game, built here on its own for tests.
+[lib]
+path = "mixins/timber/runtime.rs"
